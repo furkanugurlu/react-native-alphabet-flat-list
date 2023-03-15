@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yoonzm/react-native-alphabet-flat-list.git"
+    "url": "git+https://github.com/furkanugurlu/react-native-alphabet-flat-list.git"
   },
   "keywords": [
     "react-native",
@@ -20,12 +20,7 @@
     "flat",
     "list"
   ],
-  "author": "yoonzm",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/yoonzm/react-native-alphabet-flat-list/issues"
-  },
-  "homepage": "https://github.com/yoonzm/react-native-alphabet-flat-list#readme",
   "dependencies": {
     "react-native-root-toast": "3.0.1"
   },
