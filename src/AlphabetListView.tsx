@@ -6,10 +6,19 @@
  * Desc: 字母列表
  */
 
-import * as React from 'react'
-import { PureComponent } from 'react';
-import {GestureResponderEvent, PanResponder, PanResponderGestureState, PanResponderInstance, View, InteractionManager} from 'react-native';
-import SectionListItem from './SectionListItem';
+import * as React from "react";
+import { PureComponent } from "react";
+import {
+  GestureResponderEvent,
+  PanResponder,
+  PanResponderGestureState,
+  PanResponderInstance,
+  View,
+  InteractionManager,
+  ViewStyle,
+  TextStyle,
+} from "react-native";
+import SectionListItem from "./SectionListItem";
 import Toast from "./Toast";
 
 interface IProps {
@@ -19,11 +28,14 @@ interface IProps {
   titles: string[];
   onSelect: (index: number) => void;
   alphabetToast: boolean;
+  alphabeContainerStyle?: ViewStyle;
+  alphabeTextItemStyle?: ViewStyle;
+  alphabeTextStyle?: TextStyle;
 }
 
 const initState = {
-  selectAlphabet: '',
-  itemHeight: 0
+  selectAlphabet: "",
+  itemHeight: 0,
 };
 
 type State = Readonly<typeof initState>;
@@ -45,23 +57,26 @@ class AlphabetListView extends PureComponent<IProps, State> {
   public updateSelectAlphabet(selectAlphabet: string) {
     this.setState({
       selectAlphabet: selectAlphabet,
-    })
+    });
   }
 
-  initData({titles, contentHeight}: IProps) {
+  initData({ titles, contentHeight }: IProps) {
     this.setState({
       selectAlphabet: titles[0],
-      itemHeight: contentHeight / titles.length
-    })
+      itemHeight: contentHeight / titles.length,
+    });
   }
 
-  onTouchChange = (e: GestureResponderEvent, gestureState: PanResponderGestureState) => {
+  onTouchChange = (
+    e: GestureResponderEvent,
+    gestureState: PanResponderGestureState
+  ) => {
     const itemHeight = this.props.contentHeight / this.props.titles.length;
 
     const event: any = e.nativeEvent || {};
     const index = Math.floor((event.pageY - this.props.pageY) / itemHeight);
 
-    if (index >= 0 && index <= (this.props.titles.length - 1)) {
+    if (index >= 0 && index <= this.props.titles.length - 1) {
       this.props.onSelect && this.props.onSelect(index);
       this.updateSelectAlphabet(this.props.titles[index]);
       if (this.props.alphabetToast) {
@@ -76,27 +91,34 @@ class AlphabetListView extends PureComponent<IProps, State> {
     onStartShouldSetPanResponderCapture: () => true,
     onStartShouldSetPanResponder: () => true,
     onPanResponderTerminationRequest: () => true,
-    onPanResponderGrant: (this.onTouchChange),
-    onPanResponderMove: (this.onTouchChange),
+    onPanResponderGrant: this.onTouchChange,
+    onPanResponderMove: this.onTouchChange,
   });
 
   render() {
-    const {selectAlphabet, itemHeight} = this.state;
+    const { selectAlphabet, itemHeight } = this.state;
     // 解决键盘谈起后压缩到一起的问题
     if (itemHeight < 13) {
       return null;
     }
 
-    const {topPosition, contentHeight, titles} = this.props;
+    const {
+      topPosition,
+      contentHeight,
+      titles,
+      alphabeContainerStyle,
+      alphabeTextItemStyle,
+      alphabeTextStyle,
+    } = this.props;
 
     return (
       <View
         style={{
-          position: 'absolute',
+          position: "absolute",
           top: topPosition,
           right: 5,
           zIndex: 10,
-          height: contentHeight
+          height: contentHeight,
         }}
         {...this.responder.panHandlers}
       >
@@ -106,6 +128,9 @@ class AlphabetListView extends PureComponent<IProps, State> {
             height={itemHeight}
             title={title}
             active={selectAlphabet === title}
+            alphabeContainerStyle={alphabeContainerStyle}
+            alphabeTextItemStyle={alphabeTextItemStyle}
+            alphabeTextStyle={alphabeTextStyle}
           />
         ))}
       </View>
